@@ -1,6 +1,10 @@
 """
 zip2git converts a set of backups in zip archives into a git repository.
 
+## Contribution
+
+For questions or improvements visit [the GitHub Page](https://github.com/abbgrade/zip2git).
+
 ## Requirements
 
 It uses PythonGit, which requires a git installation.
@@ -31,6 +35,13 @@ Will be converted to a git repository like:
     - docs
       - x
       - y
+
+## Documentation
+
+The documentation uses pycco.
+Generate it with the following command:
+
+    python ..\pycco\pycco\main.py -d .\doc .\zip2git.py
 
 """
 
