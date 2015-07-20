@@ -21,7 +21,7 @@
 <h2>Contribution</h2>
 <p>For questions or improvements visit <a href="https://github.com/abbgrade/zip2git">the GitHub Page</a>.</p>
 <h2>Requirements</h2>
-<p>It uses PythonGit, which requires a git installation.
+<p>It uses <a href="https://github.com/gitpython-developers/GitPython">PythonGit</a>, which requires a git installation.
 Under Windows an entry for git in the PATH variable is necessary.</p>
 <h2>Usage</h2>
 <p>zip2git uses two directories. One that contains the backup zip archives and another restore directory that will contain the git repository.
@@ -46,7 +46,7 @@ The backup archive filenames need to have the backuped directory name as prefix 
   - y
 </code></pre>
 <h2>Documentation</h2>
-<p>The documentation uses pycco.
+<p>The documentation uses <a href="https://github.com/abbgrade/pycco">pycco</a>.
 Generate it with the following command:</p>
 <pre><code>python ..\pycco\pycco\main.py -d .\doc .\zip2git.py
 </code></pre>
@@ -83,6 +83,8 @@ Generate it with the following command:</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="n">repo</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="k">print</span> <span class="n">git</span><span class="o">.</span><span class="n">__version__</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">restore_path</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">restore_path</span><span class="p">)</span>
@@ -122,7 +124,11 @@ Generate it with the following command:</p>
 <p>Restore each zip archive and commit the changes to the git repository if not already committed.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="n">commits</span> <span class="o">=</span> <span class="p">[</span><span class="n">commit</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">commit</span> <span class="ow">in</span> <span class="n">repo</span><span class="o">.</span><span class="n">iter_commits</span><span class="p">(</span><span class="s">&#39;master&#39;</span><span class="p">)]</span>
+      <div class="highlight"><pre><span class="n">commits</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">commits</span> <span class="o">=</span> <span class="p">[</span><span class="n">commit</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">commit</span> <span class="ow">in</span> <span class="n">repo</span><span class="o">.</span><span class="n">iter_commits</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">active_branch</span><span class="p">)]</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;could select previous commits&#39;</span>
 
 <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">commits</span><span class="p">:</span>
@@ -206,11 +212,7 @@ Generate it with the following command:</p>
       <p>Add the new files to the git repository.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    
-    <span class="k">for</span> <span class="n">untracked_file</span> <span class="ow">in</span> <span class="n">repo</span><span class="o">.</span><span class="n">untracked_files</span><span class="p">:</span>
-        <span class="n">uncode_filename</span> <span class="o">=</span> <span class="n">untracked_file</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">ascii_filename</span> <span class="o">=</span> <span class="n">uncode_filename</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;1252&#39;</span><span class="p">)</span>
-        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ascii_filename</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>    <span class="n">repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">untracked_files</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>

@@ -7,7 +7,7 @@ For questions or improvements visit [the GitHub Page](https://github.com/abbgrad
 
 ## Requirements
 
-It uses PythonGit, which requires a git installation.
+It uses [PythonGit](https://github.com/gitpython-developers/GitPython), which requires a git installation.
 Under Windows an entry for git in the PATH variable is necessary.
 
 ## Usage
@@ -38,7 +38,7 @@ Will be converted to a git repository like:
 
 ## Documentation
 
-The documentation uses pycco.
+The documentation uses [pycco](https://github.com/abbgrade/pycco).
 Generate it with the following command:
 
     python ..\pycco\pycco\main.py -d .\doc .\zip2git.py
@@ -84,7 +84,11 @@ files = list(zip(*files)[1])
 #
 # Restore each zip archive and commit the changes to the git repository if not already committed.
 
-commits = [commit.message.strip() for commit in repo.iter_commits('master')]
+commits = []
+try:
+    commits = [commit.message.strip() for commit in repo.iter_commits(repo.active_branch)]
+except:
+    print 'could not select previous commits'
 
 for file in files:
     if file in commits:
@@ -126,11 +130,8 @@ for file in files:
         zip_handle.close()
 
     # Add the new files to the git repository.
-    
-    for untracked_file in repo.untracked_files:
-        uncode_filename = untracked_file.decode('utf-8')
-        ascii_filename = uncode_filename.encode('1252')
-        repo.git.add(ascii_filename)
+
+    repo.index.add(repo.untracked_files)
     
     # Commit the changes.
 
